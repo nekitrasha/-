@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import FlipMove from 'react-flip-move';
+import moment from 'moment';
 
 class TodoItems extends Component {
     constructor(props) {
@@ -8,9 +9,25 @@ class TodoItems extends Component {
         this.delete = this.delete.bind(this);
     }
 
-
+    function () {
+        var items = this.state.items;
+        var exceedLimit = 0;
+        items.map((item) => {
+            const dateLimit = moment(item.date, 'DDTHH-MM-YYYY');
+            const now = moment()
+                if (dateLimit.isValid() && now.isAfter(dateLimit)) {
+                    exceedLimit++;
+                }
+        })
+        if (exceedLimit === 1) {
+            this.setState({class: 'list1'});
+        }
+        else{this.setState({class: 'list'});
+        }
+     };
 
     addItem(item) {
+
         return <li onClick={() => this.delete(item.key)} key={item.key}>{item.text}, Выполнить до {item.date}</li>;
     }
 

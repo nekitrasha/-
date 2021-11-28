@@ -1,13 +1,16 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
+
 import './Todolist.css';
 import TodoItems from './Todoitem';
-
-
+import moment from 'moment';
 
 
 class TodoList extends Component {
+
+
     constructor(props) {
         super(props);
+
 
         this.state = {
             items: []
@@ -16,27 +19,30 @@ class TodoList extends Component {
 
         this.addItem = this.addItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
-        /*this.ProvDate = this.ProvDate.bind(this);*/
+
+        this.removeClass = this.removeClass.bind(this);
 
     }
 
 
+
+
     addItem(e) {
-        var date1 = new Date().getDate() + 7; 
-        var month = new Date().getMonth() ; 
-        var year = new Date().getFullYear(); 
-        const currentDate = date1 +' / ' + month + ' / ' + year;
+        var date1 = new Date();
+        date1 = moment (date1).add(7,'days').format('DD - MM - YYYY')
         var items = this.state.items;
         if (this._input.value !== '') {
-            items.unshift({
-                key: Date.now(),
-                text: this._input.value,
-                date: currentDate
-            });
-            this.setState({
-                items: items
-            });
-            this._input.value = '';
+            if (this._input.value.length <= 240) {
+                items.unshift({
+                    key: Date.now(),
+                    text: this._input.value,
+                    date: date1
+                });
+                this.setState({
+                    items: items
+                });
+                this._input.value = '';
+            }
         }
         e.preventDefault();
     }
@@ -53,34 +59,13 @@ class TodoList extends Component {
         });
     }
 
-   /* ProvDate(key) {
-        var items = this.state.items;
-        var exceedLimit = 0;
-        var filteredItems = items.filter(
-            function (item) {
 
-                    items.map((item) => {
-                        const dateLimit = moment(item.date, 'DDTHH-MM-YYYY');
-                        const now = moment()
-                        if (dateLimit.isValid() && now.isAfter(dateLimit)) {
-                            exceedLimit++;
-                        }
-                    }
-                )
+    removeClass(){
+        this.setState({
+            items: []
+        });
+    }
 
-            });
-            if (exceedLimit === 1) {
-                this.setState({
-                    class: 'list1'
-                });
-        }
-    }*/
-
-
-    /*removeClass(e){
-        e.target.classList.remove('list');
-        <button className="submit" onClick={() => {this.removeClass()}}>очистить</button>
-    }*/
 
 
     render() {
@@ -90,13 +75,14 @@ class TodoList extends Component {
                 <div className="form">
                     <div className="list">
                         <ul>
-                        <li>Проверить почту!</li>
-                        <li>Проверить список задач!</li>
-                        <TodoItems items={this.state.items} delete={this.deleteItem} />
+                            
+                            <TodoItems items={this.state.items} delete={this.deleteItem} />
                         </ul>
+
                     </div>
                     <form onSubmit={this.addItem}>
-                        <input ref={(a) => this._input = a}  placeholder="Новая задача" />
+                        <button className="submit" onClick={() => {this.removeClass()}}>Очистить</button>
+                        <input ref={(a) => this._input = a}  placeholder="Новая задача (не более 240 символов)" />
                         <button type="submit">Добавить</button>
                     </form>
                 </div>
@@ -106,3 +92,4 @@ class TodoList extends Component {
 }
 
 export default TodoList;
+
