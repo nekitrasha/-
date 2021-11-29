@@ -1,5 +1,4 @@
 import React, {Component, useState} from 'react';
-
 import './Todolist.css';
 import TodoItems from './Todoitem';
 import moment from 'moment';
@@ -13,7 +12,9 @@ class TodoList extends Component {
 
 
         this.state = {
-            items: []
+            items: [],
+            text: 'Позвонить маме',
+            text2: 'Проверить почту'
         }
 
 
@@ -65,8 +66,7 @@ class TodoList extends Component {
             items: []
         });
     }
-
-
+    
 
     render() {
 
@@ -75,7 +75,8 @@ class TodoList extends Component {
                 <div className="form">
                     <div className="list">
                         <ul>
-                            
+                            <li>{this.state.text}</li>
+                            <li>{this.state.text2}</li>
                             <TodoItems items={this.state.items} delete={this.deleteItem} />
                         </ul>
 
